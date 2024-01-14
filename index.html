@@ -46,7 +46,10 @@
             img.alt = photoName;
 
             // Make the displayed photo clickable to open in a new tab
-            img.addEventListener('click', () => window.open(`/viewphoto.html?folder=${folderName}&photo=${photoName}`, '_blank'));
+            img.addEventListener('click', () => {
+              console.log(`Image clicked: ${photoName} from folder ${folderName}`);
+              window.open(`/viewphoto.html?folder=${folderName}&photo=${photoName}`, '_blank');
+            });
 
             containerDiv.appendChild(img);
             galleryDiv.appendChild(containerDiv);
