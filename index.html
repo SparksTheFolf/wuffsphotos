@@ -100,11 +100,8 @@
       }
       
       window.addEventListener('DOMContentLoaded', loadRandomGallery);
-     
-  </script>
 
-  <script>
-      // Assuming info.json is in the same folder as the photos
+            // Assuming info.json is in the same folder as the photos
 const infoResponse = await fetch(`/${folderName}/info.json`);
 const infoData = await infoResponse.json();
 
@@ -123,7 +120,9 @@ photoNames.forEach(photoName => {
   galleryDiv.appendChild(containerDiv);
 
     });
+     
   </script>
+
 
   <br>
 
