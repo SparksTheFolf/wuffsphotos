@@ -12,6 +12,7 @@
     
     <div>
       <button onclick="loadGallery('ANE24')">ANE 2024</button>
+      <button onclick="loadGallery('test')">Test</button>
     </div>
 
   </header>
@@ -55,7 +56,7 @@
         const galleryDiv = document.getElementById('gallery');
         galleryDiv.innerHTML = ''; // Clear previous gallery
       
-        const folders = ['ANE24'];
+        const folders = ['ANE24', 'test'];
         const shuffledFolders = shuffleArray(folders);
       
         for (const folderName of shuffledFolders) {
