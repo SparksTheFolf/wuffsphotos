@@ -21,6 +21,22 @@
   <div id="gallery"></div>
     <script>
 
+    photoNames.forEach(photoName => {
+      const containerDiv = document.createElement('div');
+      containerDiv.classList.add('container'); // Adding class for styling
+
+      const img = document.createElement('img');
+      img.src = `/${folderName}/${photoName}`;
+      img.alt = photoName;
+
+      // Make the displayed photo clickable to open in a new tab
+      img.addEventListener('click', () => window.open(`/${folderName}/${photoName}`, '_blank'));
+
+      containerDiv.appendChild(img);
+      galleryDiv.appendChild(containerDiv);
+
+    });
+
 
     async function loadGallery(folderName) {
       const galleryDiv = document.getElementById('gallery');
