@@ -126,6 +126,15 @@
         popup.remove();
       }
 
+function openPhotoInfo(photoName) {
+  const infoUrl = `viewphoto.html/${photoName}`;
+  window.open(infoUrl, '_blank');
+}
+
+// Add this event listener to each photo in your loadGallery and loadRandomGallery functions
+img.addEventListener('click', () => openPhotoInfo(photoName));
+
+
   </script>
 
   <br>
