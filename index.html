@@ -20,120 +20,86 @@
   <div id="gallery"></div>
     <script>
 
-    async function loadGallery(folderName) {
-      const galleryDiv = document.getElementById('gallery');
-      galleryDiv.innerHTML = ''; // Clear previous gallery
+    // Existing functions: loadGallery, loadRandomGallery, shuffleArray
 
+    // Load the JSON file containing fursona information
+    async function loadFursonaInfo(folderName) {
       try {
-        const response = await fetch(`/${folderName}/list.txt`);
-        const data = await response.text();
-        const photoNames = data.split(',').map(photoName => photoName.trim());
-
-        if (photoNames.length === 0) {
-          galleryDiv.innerHTML = `<p>No photos found in the ${folderName} folder.</p>`;
-          return;
-        }
-
-        photoNames.forEach(photoName => {
-          const imageContainer = document.createElement('div');
-          imageContainer.classList.add('image-container');
-
-          const img = document.createElement('img');
-          img.src = `/${folderName}/${photoName}`;
-          img.alt = photoName;
-
-          imageContainer.appendChild(img);
-          galleryDiv.appendChild(imageContainer);
-        });
+        const response = await fetch(`/${folderName}/fursonaInfo.json`);
+        const data = await response.json();
+        return data;
       } catch (error) {
-        console.error('Error fetching photo list:', error);
-        galleryDiv.innerHTML = '<p>Something went wrong while fetching photos.</p>';
+        console.error('Error fetching fursona info:', error);
+        return {};
       }
     }
 
-    async function loadRandomGallery() {
-        const maxImages = 25;
-        const galleryDiv = document.getElementById('gallery');
-        galleryDiv.innerHTML = ''; // Clear previous gallery
+    // Open a popup with fursona information when a photo is clicked
+    function openPopup(imageUrl, fursonaInfo) {
+      const isCtrlKey = event.ctrlKey || event.metaKey; // Check if Ctrl or Command key is pressed
+      if (!isCtrlKey) {
+        const popup = document.createElement('div');
+        popup.classList.add('popup');
       
-        const folders = ['ANE24', 'test'];
-        const shuffledFolders = shuffleArray(folders);
+        const img = document.createElement('img');
+        img.src = imageUrl;
+        img.alt = 'Popup Image';
+        img.classList.add('popup-image');
       
-        for (const folderName of shuffledFolders) {
-          try {
-            const response = await fetch(`/${folderName}/list.txt`);
-            const data = await response.text();
-            const photoNames = data.split(',').map(photoName => photoName.trim());
-      
-            if (photoNames.length === 0) {
-              continue; // Skip folders with no photos
-            }
-      
-            const numImagesToShow = Math.min(photoNames.length, maxImages);
-            const shuffledPhotos = shuffleArray(photoNames).slice(0, numImagesToShow);
-      
-            for (const photoName of shuffledPhotos) {
-              const imageContainer = document.createElement('div');
-              imageContainer.classList.add('image-container');
-      
-              const img = document.createElement('img');
-              img.src = `/${folderName}/${photoName}`;
-              img.alt = photoName;
-      
-              imageContainer.appendChild(img);
-              galleryDiv.appendChild(imageContainer);
-            }
-          } catch (error) {
-            console.error('Error fetching photo list:', error);
-          }
-        }
-      }
-      
-      function shuffleArray(array) {
-        const shuffled = array.slice();
-        for (let i = shuffled.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-        }
-        return shuffled;
-      }
-      
-      window.addEventListener('DOMContentLoaded', loadRandomGallery);
+        const infoDiv = document.createElement('div');
+        infoDiv.classList.add('popup-info');
 
-      function openPopup(imageUrl) {
-        const isCtrlKey = event.ctrlKey || event.metaKey; // Check if Ctrl or Command key is pressed
-        if (!isCtrlKey) {
-          const popup = document.createElement('div');
-          popup.classList.add('popup');
-      
-          const img = document.createElement('img');
-          img.src = imageUrl;
-          img.alt = 'Popup Image';
-          img.classList.add('popup-image');
-      
-          popup.appendChild(img);
-          document.body.appendChild(popup);
-      
-          // Add an event listener to close the popup when clicked outside
-          popup.addEventListener('click', () => closePopup(popup));
-        } else {
-          // If Ctrl or Command key is pressed, let the browser handle opening in a new tab
-          window.open(imageUrl, '_blank');
-        }
-      }
-      
-      function closePopup(popup) {
-        popup.remove();
-      }
+        const fursonaName = fursonaInfo.Fursona || 'Unknown';
+        const twitterHandle = fursonaInfo.TwitterHandle || 'N/A';
+        const dateOfPicture = fursonaInfo.DateOfPicture || 'Unknown';
 
-  </script>
+        infoDiv.innerHTML = `
+          <p>Fursona Name: ${fursonaName}</p>
+          <p>Twitter Handle: ${twitterHandle}</p>
+          <p>Date of Picture: ${dateOfPicture}</p>
+        `;
+      
+        popup.appendChild(img);
+        popup.appendChild(infoDiv);
+        document.body.appendChild(popup);
+      
+        // Add an event listener to close the popup when clicked outside
+        popup.addEventListener('click', () => closePopup(popup));
+      } else {
+        // If Ctrl or Command key is pressed, let the browser handle opening in a new tab
+        window.open(imageUrl, '_blank');
+      }
+    }
+
+    // Close the popup
+    function closePopup(popup) {
+      popup.remove();
+    }
+
+    // Load fursona information and set up photo click event listeners
+    async function setupGallery(folderName) {
+      const fursonaInfo = await loadFursonaInfo(folderName);
+
+      // Add click event listeners to each image in the gallery
+      const images = document.querySelectorAll('.image-container img');
+      images.forEach((img, index) => {
+        img.addEventListener('click', () => openPopup(img.src, fursonaInfo[index + 1]));
+      });
+    }
+
+    // Modify your existing window.addEventListener to call setupGallery
+    window.addEventListener('DOMContentLoaded', async () => {
+      await loadRandomGallery(); // Load random gallery
+      await setupGallery('ANE24'); // Setup gallery with fursona info
+    });
+
+    </script>
 
   <br>
-
 
   <footer>
     <p>© 2024 Furspective Photography (A division of Sparks The Folf products)</p>
     <p><a href="https://photos.wuffs.net/Furspective-Photography-CopyrightNotice.txt">Images Copyright Notice</a></p>
-</footer>
+  </footer>
 </body>
 </html>
