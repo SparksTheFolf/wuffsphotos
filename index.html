@@ -59,11 +59,9 @@
       }
     }
 
-async function openPopup(photoName) {
-  const imageUrl = `/${folderName}/${photoName}`;
-  const photoData = photoInfo[photoName];
+function openPopup(imageUrl, photoInfo) {
+  const isCtrlKey = event.ctrlKey || event.metaKey;
 
-  const isCtrlKey = event.ctrlKey || event.metaKey; // Check if Ctrl or Command key is pressed
   if (!isCtrlKey) {
     const popup = document.createElement('div');
     popup.classList.add('popup');
@@ -74,22 +72,32 @@ async function openPopup(photoName) {
     img.classList.add('popup-image');
 
     const infoDiv = document.createElement('div');
-    infoDiv.classList.add('popup-info');
-    infoDiv.innerHTML = `<p>Fursona: ${photoData.Fursona}</p>
-                         <p>Twitter Handle: ${photoData.TwitterHandle}</p>
-                         <p>Date Taken: ${photoData.DateOfPicture}</p>`;
+    infoDiv.classList.add('photo-info');
+
+    const fursonaName = document.createElement('p');
+    fursonaName.textContent = `Fursona: ${photoInfo.Fursona}`;
+
+    const twitterHandle = document.createElement('p');
+    twitterHandle.textContent = `Twitter: ${photoInfo.TwitterHandle}`;
+
+    const dateTaken = document.createElement('p');
+    dateTaken.textContent = `Date Taken: ${photoInfo.DateOfPicture}`;
+
+    infoDiv.appendChild(fursonaName);
+    infoDiv.appendChild(twitterHandle);
+    infoDiv.appendChild(dateTaken);
 
     popup.appendChild(img);
     popup.appendChild(infoDiv);
+
     document.body.appendChild(popup);
 
-    // Add an event listener to close the popup when clicked outside
     popup.addEventListener('click', () => closePopup(popup));
   } else {
-    // If Ctrl or Command key is pressed, open in a new tab
-    window.open(imageUrl, '_blank');
+    window.open(`/viewphoto.html/${imageUrl}`, '_blank');
   }
 }
+
 
 
     // Original code
