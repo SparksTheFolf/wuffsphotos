@@ -104,19 +104,23 @@
   </script>
 
   <script>
-        photoNames.forEach(photoName => {
-      const containerDiv = document.createElement('div');
-      containerDiv.classList.add('container'); // Adding class for styling
+      // Assuming info.json is in the same folder as the photos
+const infoResponse = await fetch(`/${folderName}/info.json`);
+const infoData = await infoResponse.json();
 
-      const img = document.createElement('img');
-      img.src = `/${folderName}/${photoName}`;
-      img.alt = photoName;
+photoNames.forEach(photoName => {
+  const containerDiv = document.createElement('div');
+  containerDiv.classList.add('container'); // Adding class for styling
 
-      // Make the displayed photo clickable to open in a new tab
-      img.addEventListener('click', () => window.open(`/${folderName}/${photoName}`, '_blank'));
+  const img = document.createElement('img');
+  img.src = `/${folderName}/${photoName}`;
+  img.alt = photoName;
 
-      containerDiv.appendChild(img);
-      galleryDiv.appendChild(containerDiv);
+  // Make the displayed photo clickable to open in a new tab
+  img.addEventListener('click', () => window.open(`/${folderName}/${photoName}`, '_blank'));
+
+  containerDiv.appendChild(img);
+  galleryDiv.appendChild(containerDiv);
 
     });
   </script>
