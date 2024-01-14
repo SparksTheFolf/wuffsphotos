@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Furspective Photography</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <script>
+        function generateShortUUID() {
+  const characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const uuidLength = 11;
+  let uuid = '';
+
+  for (let i = 0; i < uuidLength; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    uuid += characters.charAt(randomIndex);
+  }
+
+  return uuid;
+}
+
+// Example usage:
+const shortUUID = generateShortUUID();
+console.log(shortUUID);
+
+    </script>
+
+
+</body>
+
+</html>
