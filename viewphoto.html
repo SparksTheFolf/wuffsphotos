@@ -47,26 +47,26 @@
       if (folderName && photoName) {
         // Assuming info.json is in the same folder as the photos
         fetch(`/${folderName}/info.json`)
-          .then(response => response.json())
-          .then(infoData => {
-            const { Fursona, TwitterHandle, DateOfPicture } = infoData[photoName];
+  .then(response => response.json())
+  .then(infoData => {
+    const { Fursona, TwitterHandle, DateOfPicture } = infoData[photoName];
 
-            const infoContent = `
-              <p>Fursona: ${Fursona}</p>
-              <p>Twitter: ${TwitterHandle}</p>
-              <p>Date: ${DateOfPicture}</p>
-            `;
+    const infoContent = `
+      <p>Fursona: ${Fursona}</p>
+      <p>Twitter: <a href="https://twitter.com/${TwitterHandle}" target="_blank">${TwitterHandle}</a></p>
+      <p>Date: ${DateOfPicture}</p>
+    `;
 
-            photoInfoDiv.innerHTML = infoContent;
-            
-            // Display the photo
-            photoDisplay.src = `/${folderName}/${photoName}`;
-            photoDisplay.alt = photoName;
-          })
-          .catch(error => {
-            console.error('Error fetching photo information:', error);
-            photoInfoDiv.innerHTML = '<p>Something went wrong while fetching photo information.</p>';
-          });
+    photoInfoDiv.innerHTML = infoContent;
+
+    // Display the photo
+    photoDisplay.src = `/${folderName}/${photoName}`;
+    photoDisplay.alt = photoName;
+  })
+  .catch(error => {
+    console.error('Error fetching photo information:', error);
+    photoInfoDiv.innerHTML = '<p>Something went wrong while fetching photo information.</p>';
+  });
       } else {
         photoInfoDiv.innerHTML = '<p>No photo information available.</p>';
       }
