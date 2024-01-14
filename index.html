@@ -59,31 +59,38 @@
       }
     }
 
-    async function openPopup(photoName) {
-      const imageUrl = `/${folderName}/${photoName}`;
-      const photoData = photoInfo[photoName];
+async function openPopup(photoName) {
+  const imageUrl = `/${folderName}/${photoName}`;
+  const photoData = photoInfo[photoName];
 
-      const popup = document.createElement('div');
-      popup.classList.add('popup');
+  const isCtrlKey = event.ctrlKey || event.metaKey; // Check if Ctrl or Command key is pressed
+  if (!isCtrlKey) {
+    const popup = document.createElement('div');
+    popup.classList.add('popup');
 
-      const img = document.createElement('img');
-      img.src = imageUrl;
-      img.alt = 'Popup Image';
-      img.classList.add('popup-image');
+    const img = document.createElement('img');
+    img.src = imageUrl;
+    img.alt = 'Popup Image';
+    img.classList.add('popup-image');
 
-      const infoDiv = document.createElement('div');
-      infoDiv.classList.add('popup-info');
-      infoDiv.innerHTML = `<p>Fursona: ${photoData.Fursona}</p>
-                           <p>Twitter Handle: ${photoData.TwitterHandle}</p>
-                           <p>Date Taken: ${photoData.DateOfPicture}</p>`;
+    const infoDiv = document.createElement('div');
+    infoDiv.classList.add('popup-info');
+    infoDiv.innerHTML = `<p>Fursona: ${photoData.Fursona}</p>
+                         <p>Twitter Handle: ${photoData.TwitterHandle}</p>
+                         <p>Date Taken: ${photoData.DateOfPicture}</p>`;
 
-      popup.appendChild(img);
-      popup.appendChild(infoDiv);
-      document.body.appendChild(popup);
+    popup.appendChild(img);
+    popup.appendChild(infoDiv);
+    document.body.appendChild(popup);
 
-      // Add an event listener to close the popup when clicked outside
-      popup.addEventListener('click', () => closePopup(popup));
-    }
+    // Add an event listener to close the popup when clicked outside
+    popup.addEventListener('click', () => closePopup(popup));
+  } else {
+    // If Ctrl or Command key is pressed, open in a new tab
+    window.open(imageUrl, '_blank');
+  }
+}
+
 
     // Original code
 
