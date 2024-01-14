@@ -22,7 +22,7 @@
     function openPhotoInfo(photoName, folderName) {
     // Mimic opening in a new tab
     const newTab = window.open('', '_blank');
-    newTab.location.href = `/viewphoto.html?folder=${folderName}&photo=${photoName}`;
+    newTab.location.href = `/viewphoto?folder=${folderName}&photo=${photoName}`;
   }
 
   // Function to load the gallery with information
