@@ -1,0 +1,56 @@
+<!-- viewphoto.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Photo Information</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    .photo-info {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Photo Information</h1>
+
+  <div id="photo-info" class="photo-info"></div>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const photoInfoDiv = document.getElementById('photo-info');
+      const urlParams = new URLSearchParams(window.location.search);
+      const folderName = urlParams.get('folder');
+      const photoName = urlParams.get('photo');
+
+      if (folderName && photoName) {
+        // Assuming info.json is in the same folder as the photos
+        fetch(`/${folderName}/info.json`)
+          .then(response => response.json())
+          .then(infoData => {
+            const { Fursona, TwitterHandle, DateOfPicture } = infoData[photoName];
+
+            const infoContent = `
+              <p>Fursona: ${Fursona}</p>
+              <p>Twitter: ${TwitterHandle}</p>
+              <p>Date: ${DateOfPicture}</p>
+            `;
+
+            photoInfoDiv.innerHTML = infoContent;
+          })
+          .catch(error => {
+            console.error('Error fetching photo information:', error);
+            photoInfoDiv.innerHTML = '<p>Something went wrong while fetching photo information.</p>';
+          });
+      } else {
+        photoInfoDiv.innerHTML = '<p>No photo information available.</p>';
+      }
+    });
+  </script>
+</body>
+</html>
