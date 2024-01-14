@@ -14,16 +14,23 @@
     .photo-info {
       margin-top: 20px;
     }
+    img {
+      max-width: 100%;
+      height: auto;
+      margin-top: 20px;
+    }
   </style>
 </head>
 <body>
   <h1>Photo Information</h1>
 
   <div id="photo-info" class="photo-info"></div>
+  <img id="photo-display" src="" alt="Photo">
 
   <script>
     window.addEventListener('DOMContentLoaded', () => {
       const photoInfoDiv = document.getElementById('photo-info');
+      const photoDisplay = document.getElementById('photo-display');
       const urlParams = new URLSearchParams(window.location.search);
       const folderName = urlParams.get('folder');
       const photoName = urlParams.get('photo');
@@ -42,6 +49,10 @@
             `;
 
             photoInfoDiv.innerHTML = infoContent;
+            
+            // Display the photo
+            photoDisplay.src = `/${folderName}/${photoName}`;
+            photoDisplay.alt = photoName;
           })
           .catch(error => {
             console.error('Error fetching photo information:', error);
