@@ -20,9 +20,9 @@
   <div id="gallery"></div>
     <script>
 
-// Function to open the photo in a new tab with information
+// Function to open the photo with information
 function openPhotoInfo(photoName, folderName) {
-    window.open(`/viewphoto.html?folder=${folderName}&photo=${photoName}`, '_blank');
+    window.location.href = `/viewphoto.html?folder=${folderName}&photo=${photoName}`;
   }
 
   // Function to load the gallery with information
