@@ -20,6 +20,56 @@
   <div id="gallery"></div>
     <script>
 
+function openPhotoInfo(photoName, folderName) {
+    window.open(`/viewphoto.html/${folderName}/${photoName}`, '_blank');
+  }
+
+  // Function to load the gallery with information
+  async function loadGalleryWithInfo(folderName) {
+    const galleryDiv = document.getElementById('gallery');
+    galleryDiv.innerHTML = ''; // Clear previous gallery
+
+    try {
+      const response = await fetch(`/${folderName}/list.txt`);
+      const data = await response.text();
+      const photoNames = data.split(',').map(photoName => photoName.trim());
+
+      if (photoNames.length === 0) {
+        galleryDiv.innerHTML = `<p>No photos found in the ${folderName} folder.</p>`;
+        return;
+      }
+
+      // Assuming info.json is in the same folder as the photos
+      const infoResponse = await fetch(`/${folderName}/info.json`);
+      const infoData = await infoResponse.json();
+
+      photoNames.forEach(photoName => {
+        const imageContainer = document.createElement('div');
+        imageContainer.classList.add('image-container');
+
+        const img = document.createElement('img');
+        img.src = `/${folderName}/${photoName}`;
+        img.alt = photoName;
+        img.addEventListener('click', () => openPhotoInfo(photoName, folderName)); // Open info on click
+
+        imageContainer.appendChild(img);
+        galleryDiv.appendChild(imageContainer);
+
+        // Add photo information to the info.json if available
+        if (infoData && infoData[photoName]) {
+          const { Fursona, TwitterHandle, DateOfPicture } = infoData[photoName];
+          const infoDiv = document.createElement('div');
+          infoDiv.classList.add('photo-info');
+          infoDiv.innerHTML = `<p>Fursona: ${Fursona}</p><p>Twitter: ${TwitterHandle}</p><p>Date: ${DateOfPicture}</p>`;
+          imageContainer.appendChild(infoDiv);
+        }
+      });
+    } catch (error) {
+      console.error('Error fetching photo list:', error);
+      galleryDiv.innerHTML = '<p>Something went wrong while fetching photos.</p>';
+    }
+  }
+
     async function loadGallery(folderName) {
       const galleryDiv = document.getElementById('gallery');
       galleryDiv.innerHTML = ''; // Clear previous gallery
@@ -99,33 +149,7 @@
       }
       
       window.addEventListener('DOMContentLoaded', loadRandomGallery);
-
-      function openPopup(imageUrl) {
-        const isCtrlKey = event.ctrlKey || event.metaKey; // Check if Ctrl or Command key is pressed
-        if (!isCtrlKey) {
-          const popup = document.createElement('div');
-          popup.classList.add('popup');
-      
-          const img = document.createElement('img');
-          img.src = imageUrl;
-          img.alt = 'Popup Image';
-          img.classList.add('popup-image');
-      
-          popup.appendChild(img);
-          document.body.appendChild(popup);
-      
-          // Add an event listener to close the popup when clicked outside
-          popup.addEventListener('click', () => closePopup(popup));
-        } else {
-          // If Ctrl or Command key is pressed, let the browser handle opening in a new tab
-          window.open(imageUrl, '_blank');
-        }
-      }
-      
-      function closePopup(popup) {
-        popup.remove();
-      }
-
+     
   </script>
 
   <br>
