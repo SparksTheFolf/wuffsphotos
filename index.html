@@ -20,8 +20,9 @@
   <div id="gallery"></div>
     <script>
 
+// Function to open the photo in a new tab with information
 function openPhotoInfo(photoName, folderName) {
-    window.open(`/viewphoto.html/${folderName}/${photoName}`, '_blank');
+    window.open(`/viewphoto.html?folder=${folderName}&photo=${photoName}`, '_blank');
   }
 
   // Function to load the gallery with information
@@ -44,16 +45,16 @@ function openPhotoInfo(photoName, folderName) {
       const infoData = await infoResponse.json();
 
       photoNames.forEach(photoName => {
-        const imageContainer = document.createElement('div');
-        imageContainer.classList.add('image-container');
+        const containerDiv = document.createElement('div');
+        containerDiv.classList.add('container'); // Adding class for styling
 
         const img = document.createElement('img');
         img.src = `/${folderName}/${photoName}`;
         img.alt = photoName;
         img.addEventListener('click', () => openPhotoInfo(photoName, folderName)); // Open info on click
 
-        imageContainer.appendChild(img);
-        galleryDiv.appendChild(imageContainer);
+        containerDiv.appendChild(img);
+        galleryDiv.appendChild(containerDiv);
 
         // Add photo information to the info.json if available
         if (infoData && infoData[photoName]) {
@@ -61,7 +62,7 @@ function openPhotoInfo(photoName, folderName) {
           const infoDiv = document.createElement('div');
           infoDiv.classList.add('photo-info');
           infoDiv.innerHTML = `<p>Fursona: ${Fursona}</p><p>Twitter: ${TwitterHandle}</p><p>Date: ${DateOfPicture}</p>`;
-          imageContainer.appendChild(infoDiv);
+          containerDiv.appendChild(infoDiv);
         }
       });
     } catch (error) {
@@ -69,6 +70,7 @@ function openPhotoInfo(photoName, folderName) {
       galleryDiv.innerHTML = '<p>Something went wrong while fetching photos.</p>';
     }
   }
+
 
     async function loadGallery(folderName) {
       const galleryDiv = document.getElementById('gallery');
