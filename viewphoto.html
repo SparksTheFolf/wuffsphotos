@@ -3,25 +3,47 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>View Photo</title>
+  <title>Photo Information</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <header>
+    <h1>Photo Information</h1>
+  </header>
+
+  <div id="photoInfo"></div>
+
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const photoName = window.location.pathname.split('/').pop();
-      fetch('info.json')
-        .then(response => response.json())
-        .then(info => {
-          const photoInfo = info[photoName];
-          if (photoInfo) {
-            // Display the information as needed
-            console.log(photoInfo);
-          } else {
-            console.error(`Information not found for ${photoName}`);
-          }
-        })
-        .catch(error => console.error('Error fetching information:', error));
-    });
+    // Parse photo information from info.json based on the photo name in the URL
+    const photoName = window.location.pathname.split('/').pop();
+    const infoUrl = `info.json`;
+
+    fetch(infoUrl)
+      .then(response => response.json())
+      .then(data => {
+        const photoInfo = data[photoName];
+
+        if (photoInfo) {
+          const photoInfoDiv = document.getElementById('photoInfo');
+          const infoHtml = `
+            <p><strong>Fursona Name:</strong> ${photoInfo.Fursona}</p>
+            <p><strong>Twitter Handle:</strong> ${photoInfo.TwitterHandle}</p>
+            <p><strong>Date of Picture:</strong> ${photoInfo.DateOfPicture}</p>
+          `;
+          photoInfoDiv.innerHTML = infoHtml;
+        } else {
+          // Handle case when photo information is not found
+          document.body.innerHTML = '<p>Photo information not available.</p>';
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching photo information:', error);
+        document.body.innerHTML = '<p>Something went wrong while fetching photo information.</p>';
+      });
   </script>
+
+  <footer>
+    <!-- Add your footer content if needed -->
+  </footer>
 </body>
 </html>
