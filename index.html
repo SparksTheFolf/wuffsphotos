@@ -18,13 +18,7 @@
   </header>
   <br>
   <div id="gallery"></div>
-  <br>
-  <footer>
-    <p>© 2024 Furspective Photography (A division of Sparks The Folf products)</p>
-    <p><a href="https://photos.wuffs.net/Furspective-Photography-CopyrightNotice.txt">Images Copyright Notice</a></p>
-  </footer>
-
-  <script>
+    <script>
 
     async function loadGallery(folderName) {
       const galleryDiv = document.getElementById('gallery');
@@ -40,6 +34,11 @@
           return;
         }
 
+        // Fetch and parse the JSON file for photo information
+        const infoResponse = await fetch(`/${folderName}/info.json`);
+        const infoData = await infoResponse.json();
+        Object.assign(photoInfo, infoData);
+
         photoNames.forEach(photoName => {
           const imageContainer = document.createElement('div');
           imageContainer.classList.add('image-container');
@@ -48,17 +47,45 @@
           img.src = `/${folderName}/${photoName}`;
           img.alt = photoName;
 
+          // Add a click event listener to open the popup with photo information
+          img.addEventListener('click', () => openPopup(photoName));
+
           imageContainer.appendChild(img);
           galleryDiv.appendChild(imageContainer);
         });
-
-        // Call setupGallery to add click event listeners
-        await setupGallery(folderName);
       } catch (error) {
         console.error('Error fetching photo list:', error);
         galleryDiv.innerHTML = '<p>Something went wrong while fetching photos.</p>';
       }
     }
+
+    async function openPopup(photoName) {
+      const imageUrl = `/${folderName}/${photoName}`;
+      const photoData = photoInfo[photoName];
+
+      const popup = document.createElement('div');
+      popup.classList.add('popup');
+
+      const img = document.createElement('img');
+      img.src = imageUrl;
+      img.alt = 'Popup Image';
+      img.classList.add('popup-image');
+
+      const infoDiv = document.createElement('div');
+      infoDiv.classList.add('popup-info');
+      infoDiv.innerHTML = `<p>Fursona: ${photoData.Fursona}</p>
+                           <p>Twitter Handle: ${photoData.TwitterHandle}</p>
+                           <p>Date Taken: ${photoData.DateOfPicture}</p>`;
+
+      popup.appendChild(img);
+      popup.appendChild(infoDiv);
+      document.body.appendChild(popup);
+
+      // Add an event listener to close the popup when clicked outside
+      popup.addEventListener('click', () => closePopup(popup));
+    }
+
+    // Original code
 
     async function loadRandomGallery() {
       const maxImages = 25;
@@ -96,20 +123,8 @@
           console.error('Error fetching photo list:', error);
         }
       }
-
-      // Call setupGallery to add click event listeners
-      await setupGallery(folders[0]); // Using the first folder for setup
     }
-
-    async function setupGallery(folderName) {
-      const fursonaInfo = await loadFursonaInfo(folderName);
-
-      const images = document.querySelectorAll('.image-container img');
-      images.forEach((img, index) => {
-        img.addEventListener('click', () => openPopup(img.src, fursonaInfo[index + 1]));
-      });
-    }
-
+    
     function shuffleArray(array) {
       const shuffled = array.slice();
       for (let i = shuffled.length - 1; i > 0; i--) {
@@ -118,58 +133,20 @@
       }
       return shuffled;
     }
-
-    async function loadFursonaInfo(folderName) {
-      try {
-        const response = await fetch(`/${folderName}/fursonaInfo.json`);
-        const data = await response.json();
-        return data;
-      } catch (error) {
-        console.error('Error fetching fursona info:', error);
-        return {};
-      }
-    }
-
-    function openPopup(imageUrl, fursonaInfo) {
-      const isCtrlKey = event.ctrlKey || event.metaKey;
-      if (!isCtrlKey) {
-        const popup = document.createElement('div');
-        popup.classList.add('popup');
-
-        const img = document.createElement('img');
-        img.src = imageUrl;
-        img.alt = 'Popup Image';
-        img.classList.add('popup-image');
-
-        const infoDiv = document.createElement('div');
-        infoDiv.classList.add('popup-info');
-
-        const fursonaName = fursonaInfo.Fursona || 'Unknown';
-        const twitterHandle = fursonaInfo.TwitterHandle || 'N/A';
-        const dateOfPicture = fursonaInfo.DateOfPicture || 'Unknown';
-
-        infoDiv.innerHTML = `
-          <p>Fursona Name: ${fursonaName}</p>
-          <p>Twitter Handle: ${twitterHandle}</p>
-          <p>Date of Picture: ${dateOfPicture}</p>
-        `;
-
-        popup.appendChild(img);
-        popup.appendChild(infoDiv);
-        document.body.appendChild(popup);
-
-        popup.addEventListener('click', () => closePopup(popup));
-      } else {
-        window.open(imageUrl, '_blank');
-      }
-    }
+    
+    window.addEventListener('DOMContentLoaded', loadRandomGallery);
 
     function closePopup(popup) {
       popup.remove();
     }
 
-    window.addEventListener('DOMContentLoaded', loadRandomGallery);
+    </script>
 
-  </script>
+  <br>
+
+  <footer>
+    <p>© 2024 Furspective Photography (A division of Sparks The Folf products)</p>
+    <p><a href="https://photos.wuffs.net/Furspective-Photography-CopyrightNotice.txt">Images Copyright Notice</a></p>
+  </footer>
 </body>
 </html>
