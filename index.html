@@ -18,61 +18,6 @@
   </header>
   <br>
 
-  <script>
-    function openPhotoInfo(photoName, folderName) {
-    // Mimic opening in a new tab
-    const newTab = window.open('', '_blank');
-    newTab.location.href = `/viewphoto?folder=${folderName}&photo=${photoName}`;
-  }
-
-  // Function to load the gallery with information
-  async function loadGalleryWithInfo(folderName) {
-    const galleryDiv = document.getElementById('gallery');
-    galleryDiv.innerHTML = ''; // Clear previous gallery
-
-    try {
-      const response = await fetch(`/${folderName}/list.txt`);
-      const data = await response.text();
-      const photoNames = data.split(',').map(photoName => photoName.trim());
-
-      if (photoNames.length === 0) {
-        galleryDiv.innerHTML = `<p>No photos found in the ${folderName} folder.</p>`;
-        return;
-      }
-
-      // Assuming info.json is in the same folder as the photos
-      const infoResponse = await fetch(`/${folderName}/info.json`);
-      const infoData = await infoResponse.json();
-
-      photoNames.forEach(photoName => {
-        const containerDiv = document.createElement('div');
-        containerDiv.classList.add('container'); // Adding class for styling
-
-        const img = document.createElement('img');
-        img.src = `/${folderName}/${photoName}`;
-        img.alt = photoName;
-        img.addEventListener('click', () => openPhotoInfo(photoName, folderName)); // Open info on click
-
-        containerDiv.appendChild(img);
-        galleryDiv.appendChild(containerDiv);
-
-        // Add photo information to the info.json if available
-        if (infoData && infoData[photoName]) {
-          const { Fursona, TwitterHandle, DateOfPicture } = infoData[photoName];
-          const infoDiv = document.createElement('div');
-          infoDiv.classList.add('photo-info');
-          infoDiv.innerHTML = `<p>Fursona: ${Fursona}</p><p>Twitter: ${TwitterHandle}</p><p>Date: ${DateOfPicture}</p>`;
-          containerDiv.appendChild(infoDiv);
-        }
-      });
-    } catch (error) {
-      console.error('Error fetching photo list:', error);
-      galleryDiv.innerHTML = '<p>Something went wrong while fetching photos.</p>';
-    }
-  }
-
-  </script>
-
   <div id="gallery"></div>
     <script>
 
