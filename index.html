@@ -11,10 +11,7 @@
     <h1>Furspective Photography</h1>
     
     <div>
-      <button onclick="loadGallery('NYCTrip')">NYCTrip</button>
-      <button onclick="loadGallery('ONT')">ONT</button>
-      <button onclick="loadGallery('RandomFlying')">RandomFlying</button>
-      <button onclick="loadGallery('The%20Window%E2%84%A2')">The Window™</button>
+      <button onclick="loadGallery('ANE24')">ANE 2024</button>
     </div>
 
   </header>
@@ -58,7 +55,7 @@
         const galleryDiv = document.getElementById('gallery');
         galleryDiv.innerHTML = ''; // Clear previous gallery
       
-        const folders = ['RandomFlying', '35mm', 'NYCTrip', 'ONT'];
+        const folders = ['ANE24'];
         const shuffledFolders = shuffleArray(folders);
       
         for (const folderName of shuffledFolders) {
