@@ -51,9 +51,13 @@
   .then(infoData => {
     const { Fursona, TwitterHandle, DateOfPicture } = infoData[photoName];
 
+    const twitterContent = (TwitterHandle !== 'N/A') ?
+      `<p>Twitter: <a href="https://twitter.com/${TwitterHandle}" target="_blank">${TwitterHandle}</a></p>` :
+      '<p>Twitter: N/A</p>';
+
     const infoContent = `
       <p>Fursona: ${Fursona}</p>
-      <p>Twitter: <a href="https://twitter.com/${TwitterHandle}" target="_blank">${TwitterHandle}</a></p>
+      ${twitterContent}
       <p>Date: ${DateOfPicture}</p>
     `;
 
