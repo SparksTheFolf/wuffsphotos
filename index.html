@@ -21,76 +21,42 @@
   <div id="gallery"></div>
 
   <script>
-        (async () => {
-      // Function to load the gallery without adding photo information
-      async function loadGallery(folderName) {
-        const galleryDiv = document.getElementById('gallery');
-        galleryDiv.innerHTML = ''; // Clear previous gallery
-
-        try {
-          const response = await fetch(`/${folderName}/list.txt`);
-          const data = await response.text();
-          const photoNames = data.split(',').map(photoName => photoName.trim());
-
-          if (photoNames.length === 0) {
-            galleryDiv.innerHTML = `<p>No photos found in the ${folderName} folder.</p>`;
-            return;
-          }
-
-          photoNames.forEach(photoName => {
-            const containerDiv = document.createElement('div');
-            containerDiv.classList.add('container'); // Adding class for styling
-
-            const img = document.createElement('img');
-            img.src = `/${folderName}/${photoName}`;
-            img.alt = photoName;
-
-            // Make the displayed photo clickable to open in a new tab
-            img.addEventListener('click', () => {
-              console.log(`Image clicked: ${photoName} from folder ${folderName}`);
-              window.open(`/viewphoto.html?folder=${folderName}&photo=${photoName}`, '_blank');
-            });
-
-            containerDiv.appendChild(img);
-            galleryDiv.appendChild(containerDiv);
-          });
-        } catch (error) {
-          console.error('Error fetching photo list:', error);
-          galleryDiv.innerHTML = '<p>Something went wrong while fetching photos.</p>';
-        }
-      }
-    })();
     
     async function loadGallery(folderName) {
-      const galleryDiv = document.getElementById('gallery');
-      galleryDiv.innerHTML = ''; // Clear previous gallery
+    const galleryDiv = document.getElementById('gallery');
+    galleryDiv.innerHTML = ''; // Clear previous gallery
 
-      try {
-        const response = await fetch(`/${folderName}/list.txt`);
-        const data = await response.text();
-        const photoNames = data.split(',').map(photoName => photoName.trim());
+    try {
+      const response = await fetch(`/${folderName}/list.txt`);
+      const data = await response.text();
+      const photoNames = data.split(',').map(photoName => photoName.trim());
 
-        if (photoNames.length === 0) {
-          galleryDiv.innerHTML = `<p>No photos found in the ${folderName} folder.</p>`;
-          return;
-        }
-
-        photoNames.forEach(photoName => {
-          const imageContainer = document.createElement('div');
-          imageContainer.classList.add('image-container');
-
-          const img = document.createElement('img');
-          img.src = `/${folderName}/${photoName}`;
-          img.alt = photoName;
-
-          imageContainer.appendChild(img);
-          galleryDiv.appendChild(imageContainer);
-        });
-      } catch (error) {
-        console.error('Error fetching photo list:', error);
-        galleryDiv.innerHTML = '<p>Something went wrong while fetching photos.</p>';
+      if (photoNames.length === 0) {
+        galleryDiv.innerHTML = `<p>No photos found in the ${folderName} folder.</p>`;
+        return;
       }
+
+      photoNames.forEach(photoName => {
+        const imageContainer = document.createElement('div');
+        imageContainer.classList.add('image-container');
+
+        const img = document.createElement('img');
+        img.src = `/${folderName}/${photoName}`;
+        img.alt = photoName;
+
+        // Make the displayed photo clickable to open in a new tab
+        img.addEventListener('click', () => {
+          window.open(`/viewphoto.html?folder=${folderName}&photo=${photoName}`, '_blank');
+        });
+
+        imageContainer.appendChild(img);
+        galleryDiv.appendChild(imageContainer);
+      });
+    } catch (error) {
+      console.error('Error fetching photo list:', error);
+      galleryDiv.innerHTML = '<p>Something went wrong while fetching photos.</p>';
     }
+  }
 
     async function loadRandomGallery() {
         const maxImages = 25;
