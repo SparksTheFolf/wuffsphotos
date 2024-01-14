@@ -59,45 +59,6 @@
       }
     }
 
-function openPopup(imageUrl, photoInfo) {
-  const isCtrlKey = event.ctrlKey || event.metaKey;
-
-  if (!isCtrlKey) {
-    const popup = document.createElement('div');
-    popup.classList.add('popup');
-
-    const img = document.createElement('img');
-    img.src = imageUrl;
-    img.alt = 'Popup Image';
-    img.classList.add('popup-image');
-
-    const infoDiv = document.createElement('div');
-    infoDiv.classList.add('photo-info');
-
-    const fursonaName = document.createElement('p');
-    fursonaName.textContent = `Fursona: ${photoInfo.Fursona}`;
-
-    const twitterHandle = document.createElement('p');
-    twitterHandle.textContent = `Twitter: ${photoInfo.TwitterHandle}`;
-
-    const dateTaken = document.createElement('p');
-    dateTaken.textContent = `Date Taken: ${photoInfo.DateOfPicture}`;
-
-    infoDiv.appendChild(fursonaName);
-    infoDiv.appendChild(twitterHandle);
-    infoDiv.appendChild(dateTaken);
-
-    popup.appendChild(img);
-    popup.appendChild(infoDiv);
-
-    document.body.appendChild(popup);
-
-    popup.addEventListener('click', () => closePopup(popup));
-  } else {
-    window.open(`/viewphoto.html/${imageUrl}`, '_blank');
-  }
-}
-
 
 
     // Original code
